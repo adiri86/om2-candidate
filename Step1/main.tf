@@ -1,11 +1,15 @@
-# main.tf
+data "aws_ami" "windows" {
+  most_recent = true
+  owners      = ["amazon"]
 
-provider "aws" {
-  region = var.aws_region
+  filter {
+    name   = "name"
+    values = ["Windows_Server-*-English-*-Base-*"]
+  }
 }
 
 resource "aws_instance" "windows_instance" {
-  ami           = var.windows_ami_id
+  ami           = data.aws_ami.windows.id
   instance_type = var.instance_type
 
   tags = {
@@ -24,7 +28,7 @@ resource "aws_instance" "windows_instance" {
   vpc_security_group_ids = [aws_security_group.sg.id]
   
   key_name = var.key_name  # Reference the existing key pair name here
-
+}
 
 resource "aws_security_group" "sg" {
   name        = "windows_sg"
@@ -34,7 +38,7 @@ resource "aws_security_group" "sg" {
     from_port   = 3389
     to_port     = 3389
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["203.0.113.0/24"] #represents a CIDR block that includes all IP addresses from 203.0.113.0 to 203.0.113.255. 
   }
 
   egress {
