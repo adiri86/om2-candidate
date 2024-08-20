@@ -12,7 +12,7 @@ function Log-Message {
     Write-Host $Message
 }
 
-function Install_Win_Features {
+function Install-WindowsFeatures {
     param (
         [string[]]$Features
     )
@@ -22,7 +22,7 @@ function Install_Win_Features {
     foreach ($Feature in $Features) {
         try {
             Log-Message "Installing feature: $Feature"
-            Install-WindowsFeature -Name $Feature -Verbose
+            Install-WindowsFeatures -Name $Feature -Verbose
             Log-Message "Feature $Feature installed successfully."
         } catch {
             Log-Message "Failed to install feature $Feature. Error: $_"
