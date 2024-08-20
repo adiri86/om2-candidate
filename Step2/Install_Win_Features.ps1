@@ -17,9 +17,24 @@ function Install-WindowsFeatures {
         [string[]]$Features
     )
     
-    $InstallationSuccessful = $true
+    # Validate that $Features is an array and contains non-empty strings
+    if (-not ($Features -is [array])) {
+        Log-Message "Error: Features parameter is not an array."
+        return $false
+    }
+    # Check if the $Features array is empty
+    if ($Features.Count -eq 0) {
+        Log-Message "Error: No features specified for installation."
+        return $false
+    }
 
     foreach ($Feature in $Features) {
+     # Check if the current feature name is null, empty, or contains only whitespace
+        if ([string]::IsNullOrWhiteSpace($Feature)) {
+            Log-Message "Error: Invalid feature name: '$Feature'. Skipping..."
+            $InstallationSuccessful = $false
+            continue
+        }
         try {
             Log-Message "Installing feature: $Feature"
             Install-WindowsFeatures -Name $Feature -Verbose
