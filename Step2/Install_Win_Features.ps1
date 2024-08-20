@@ -53,7 +53,7 @@ function Restart_Server {
     try {
         Log-Message "Restarting the computer..."
         Restart-Computer -Force
-        Log-Message "Restart initiated successfully."
+        # No need for further code as restart is initiated
         return $true
     } catch {
         Log-Message "Failed to restart the computer. Error: $_"
